@@ -8,6 +8,15 @@
             A minimum lenght of 5 characters is required
         </mat-error>
     </mat-form-field>
+    <mat-radio-group class="course-type" formControlName="courseType">
+        <mat-radio-button [disabled]="true" value="free">
+            Free
+        </mat-radio-button>
+        <mat-radio-button value="premium">
+            Premium
+        </mat-radio-button>
+
+    </mat-radio-group>
 
 </div>
 
