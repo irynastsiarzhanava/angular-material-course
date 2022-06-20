@@ -5,9 +5,10 @@ import { MatSort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
 import {Course} from "../model/course";
 import {CoursesService} from "../services/courses.service";
-import {debounceTime, distinctUntilChanged, startWith, tap, delay, catchError} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, startWith, tap, delay, catchError, finalize} from 'rxjs/operators';
 import {merge, fromEvent, throwError} from "rxjs";
 import { Lesson } from '../model/lesson';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 
 @Component({
@@ -18,8 +19,8 @@ import { Lesson } from '../model/lesson';
 export class CourseComponent implements OnInit, AfterViewInit {
 
     course:Course;
-
     lessons: Lesson[] = [];
+    loading = false;
 
     constructor(private route: ActivatedRoute,
                 private coursesService: CoursesService) {
@@ -37,6 +38,7 @@ export class CourseComponent implements OnInit, AfterViewInit {
     }
 
     loadLessonsPage() {
+      this.loading = true;
       this.coursesService.findLessons(this.course.id, 'asc', 0, 3)
         .pipe(
           tap(lessons => this.lessons = lessons),
@@ -44,7 +46,8 @@ export class CourseComponent implements OnInit, AfterViewInit {
             console.log('Error Loading Lessons', err);
             alert('Error Loading Lessons');
             return throwError(err);
-          })
+          }),
+          finalize(() => this.loading = false)
         )
         .subscribe();
     }

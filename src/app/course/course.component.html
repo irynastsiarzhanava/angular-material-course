@@ -5,6 +5,9 @@
   <img class="course-thumbnail mat-elevation-z8" [src]="course?.iconUrl">
 
 </div>
+<div class="spinner-container" *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>
 <table mat-table class="lessons-table mat-elevation-z8" [dataSource]="lessons">
   <ng-container matColumnDef="seqNo">
     <th mat-header-cell *matHeaderCellDef>#</th>
